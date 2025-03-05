@@ -1,6 +1,6 @@
 FROM python:3.9-slim
 
-# Install system dependencies
+# Установка системных зависимостей
 RUN apt-get update && apt-get install -y \
     gcc \
     python3-dev \
@@ -9,27 +9,29 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Set working directory
+# Установка рабочей директории
 WORKDIR /app
 
-# Install Python packages
+# Копирование зависимостей
 COPY requirements.txt .
+
+# Установка зависимостей Python
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
+# Копирование остальных файлов проекта
 COPY . .
 
-# Set environment variables
+# Установка переменных окружения
 ENV PYTHONUNBUFFERED=1
 ENV FLASK_APP=app
 ENV FLASK_ENV=production
 
-# Expose port
+# Открытие порта
 EXPOSE 5000
 
-# Health check
+# Проверка здоровья
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
-    CMD python -c "from app import db; db.session.execute('SELECT 1')"
+    CMD curl --fail http://localhost:5000/health || exit 1
 
-# Run the application
+# Запуск приложения
 CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]
