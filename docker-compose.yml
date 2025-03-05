@@ -11,13 +11,14 @@ services:
       - DB_PASSWORD=password
       - DB_NAME=rds
     depends_on:
-      - db
+      db:
+        condition: service_healthy  # Ждём, пока база станет "healthy"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
-      interval: 30s
-      timeout: 5s
-      retries: 3
-      start_period: 30s
+      interval: 30s              # Проверяем каждые 30 секунд
+      timeout: 5s                # Таймаут запроса — 5 секунд
+      retries: 3                 # 3 попытки до провала
+      start_period: 30s          # Даём 30 секунд на запуск перед проверками
 
   db:
     image: mysql:8.0
@@ -26,10 +27,9 @@ services:
       - MYSQL_DATABASE=rds
       - MYSQL_USER=user
       - MYSQL_PASSWORD=password
-    volumes:
-      - mysql_data:/var/lib/mysql
-    ports:
-      - "3306:3306"
-
-volumes:
-  mysql_data:
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "user", "-ppassword"]
+      interval: 30s              # Проверяем каждые 30 секунд
+      timeout: 5s                # Таймаут — 5 секунд
+      retries: 3                 # 3 попытки
+      start_period: 30s          # Даём 30 секунд на старт
