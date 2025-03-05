@@ -1,0 +1,17 @@
+{
+  "build": {
+    "builder": "NIXPACKS",
+    "nixpacksPlan": {
+      "providers": ["python"],
+      "phases": {
+        "setup": {
+          "aptPkgs": ["python3-dev", "libmysqlclient-dev", "pkg-config"]
+        }
+      }
+    }
+  },
+  "deploy": {
+    "startCommand": "gunicorn --bind 0.0.0.0:$PORT wsgi:app",
+    "restartPolicy": "ON_FAILURE"
+  }
+}

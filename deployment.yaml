@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rds-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rds
+  template:
+    metadata:
+      labels:
+        app: rds
+    spec:
+      containers:
+      - name: rds-app
+        image: rds:latest
+        ports:
+        - containerPort: 5000
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+        env:
+        - name: FLASK_ENV
+          value: "production"
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: rds-secrets
+              key: database-url
