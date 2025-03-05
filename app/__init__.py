@@ -6,6 +6,7 @@ from config import Config
 import logging
 from logging.handlers import RotatingFileHandler
 import os
+from app.routes.health import health_bp
 
 app = Flask(__name__)
 
@@ -54,11 +55,13 @@ def create_app():
         from app.api.routes import api
         from app.routes.export import export
         from app.routes.health import health
+        from app.routes.health import health_bp
         app.register_blueprint(auth)
         app.register_blueprint(main)
         app.register_blueprint(api)
         app.register_blueprint(export)
         app.register_blueprint(health)
+        app.register_blueprint(health_bp)
         app.logger.info("Routes registered successfully")
     except Exception as e:
         app.logger.error(f"Blueprint registration error: {e}")
