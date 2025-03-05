@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="mb-4">Список пожаров</h1>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Регион</th>
+                <th>Дата</th>
+                <th>Статус</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for fire in fires %}
+            <tr>
+                <td>{{ fire.id }}</td>
+                <td>{{ fire.region }}</td>
+                <td>{{ fire.date }}</td>
+                <td>{{ fire.status }}</td>
+                <td>
+                    <a href="{{ url_for('main.edit_fire', id=fire.id) }}" class="btn btn-sm btn-primary">Изменить</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="error-template">
+                <h1>Упс!</h1>
+                <h2>500 Internal Server Error</h2>
+                <div class="error-details">
+                    {{ error }}
+                </div>
+                <div class="error-actions">
+                    <a href="{{ url_for('main.index') }}" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-home"></span>
+                        На главную
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

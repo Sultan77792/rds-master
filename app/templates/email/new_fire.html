@@ -1,0 +1,13 @@
+<h2>Зарегистрирован новый пожар</h2>
+<p>
+    <strong>Регион:</strong> {{ fire.region }}<br>
+    <strong>Местоположение:</strong> {{ fire.location }}<br>
+    <strong>Площадь:</strong> {{ fire.area_affected }} га<br>
+    <strong>Статус:</strong> {{ fire.status.value }}<br>
+    <strong>Дата обнаружения:</strong> {{ fire.date_reported.strftime('%d.%m.%Y %H:%M') }}
+</p>
+<p>
+    <a href="{{ url_for('main.edit_fire', id=fire.id, _external=True) }}">
+        Перейти к просмотру
+    </a>
+</p>

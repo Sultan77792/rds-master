@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Сводная информация</h2>
+    
+    <!-- Фильтр по датам -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Начальная дата</label>
+                    <input type="date" name="start_date" class="form-control" 
+                           value="{{ start_date }}" min="2023-01-01">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Конечная дата</label>
+                    <input type="date" name="end_date" class="form-control" 
+                           value="{{ end_date }}">
+                </div>
+                <div class="col-md-4 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary">Применить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Таблица данных -->
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Регион</th>
+                    <th>Количество пожаров</th>
+                    <th>Общая площадь (га)</th>
+                    <th>Ущерб (тг)</th>
+                    <th>Всего людей</th>
+                    <th>Всего техники</th>
+                    <th>Всего ВС</th>
+                    <th>ВС АПС</th>
+                    <th>Людей АПС</th>
+                    <th>Техники АПС</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in summary %}
+                <tr>
+                    <td>{{ row.region }}</td>
+                    <td class="text-end">{{ row.total_fires | number }}</td>
+                    <td class="text-end">{{ "%.2f"|format(row.total_area) }}</td>
+                    <td class="text-end">{{ row.total_damage | currency }}</td>
+                    <td class="text-end">{{ row.total_people | number }}</td>
+                    <td class="text-end">{{ row.total_vehicles | number }}</td>
+                    <td class="text-end">{{ row.total_aircraft | number }}</td>
+                    <td class="text-end">{{ row.aps_aircraft | number }}</td>
+                    <td class="text-end">{{ row.aps_people | number }}</td>
+                    <td class="text-end">{{ row.aps_vehicles | number }}</td>
+                </tr>
+                {% endfor %}
+                <tr class="table-info font-weight-bold">
+                    <td>ИТОГО:</td>
+                    <td class="text-end">{{ totals.total_fires | number }}</td>
+                    <td class="text-end">{{ "%.2f"|format(totals.total_area) }}</td>
+                    <td class="text-end">{{ totals.total_damage | currency }}</td>
+                    <td class="text-end">{{ totals.total_people | number }}</td>
+                    <td class="text-end">{{ totals.total_vehicles | number }}</td>
+                    <td class="text-end">{{ totals.total_aircraft | number }}</td>
+                    <td class="text-end">{{ totals.aps_aircraft | number }}</td>
+                    <td class="text-end">{{ totals.aps_people | number }}</td>
+                    <td class="text-end">{{ totals.aps_vehicles | number }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

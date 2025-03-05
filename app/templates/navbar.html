@@ -1,0 +1,22 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="{{ url_for('main.index') }}">Fire Incidents</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('main.fires_list') }}">Пожары</a>
+                </li>
+                {% if current_user.can(Permission.CREATE) %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('main.add_fire') }}">Добавить пожар</a>
+                </li>
+                {% endif %}
+                {% if current_user.is_administrator() %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('main.admin') }}">Админ панель</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>

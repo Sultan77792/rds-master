@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Список пожаров</h2>
+        <div>
+            {% if current_user.can(Permission.CREATE) %}
+            <a href="{{ url_for('main.add_fire') }}" class="btn btn-primary me-2">
+                Добавить пожар
+            </a>
+            {% endif %}
+            <a href="{{ url_for('main.export_fires_excel') }}" class="btn btn-success">
+                Экспорт в Excel
+            </a>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Регион</th>
+                    <th>Местоположение</th>
+                    <th>Дата</th>
+                    <th>Статус</th>
+                    <th>Площадь (га)</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for fire in fires.items %}
+                <tr>
+                    <td>{{ fire.region }}</td>
+                    <td>{{ fire.location }}</td>
+                    <td>{{ fire.date_reported.strftime('%d.%m.%Y') }}</td>
+                    <td>
+                        <span class="badge bg-{{ fire.status.value }}">
+                            {{ fire.status.value }}
+                        </span>
+                    </td>
+                    <td>{{ fire.area_affected }}</td>
+                    <td>
+                        <a href="{{ url_for('main.fire_edit', id=fire.id) }}" 
+                           class="btn btn-sm btn-outline-primary">
+                            Редактировать
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {{ render_pagination(fires) }}
+</div>
+{% endblock %}

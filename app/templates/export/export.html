@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Экспорт данных о пожарах</h2>
+    
+    <form action="{{ url_for('export.export_fires') }}" method="post" class="mt-4">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Дата начала:</label>
+                    <input type="date" name="start_date" class="form-control" required>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Дата окончания:</label>
+                    <input type="date" name="end_date" class="form-control" required>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group mt-3">
+            <label>Формат экспорта:</label>
+            <select name="format" class="form-control">
+                <option value="csv">CSV</option>
+                <option value="xlsx">Excel</option>
+            </select>
+        </div>
+        
+        <button type="submit" class="btn btn-primary mt-3">
+            <i class="fas fa-download"></i> Экспортировать
+        </button>
+    </form>
+</div>
+{% endblock %}

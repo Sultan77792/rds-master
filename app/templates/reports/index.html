@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2>Отчеты и статистика</h2>
+    
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="POST">
+                {{ form.hidden_tag() }}
+                <div class="row">
+                    <div class="col-md-4">
+                        {{ form.start_date.label(class="form-label") }}
+                        {{ form.start_date(class="form-control") }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form.end_date.label(class="form-label") }}
+                        {{ form.end_date(class="form-control") }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form.report_type.label(class="form-label") }}
+                        {{ form.report_type(class="form-control") }}
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Сформировать отчет</button>
+            </form>
+        </div>
+    </div>
+
+    {% if data %}
+    <div class="card">
+        <div class="card-body">
+            {% if form.report_type.data == 'summary' %}
+                {% include 'reports/_summary.html' %}
+            {% elif form.report_type.data == 'by_region' %}
+                {% include 'reports/_by_region.html' %}
+            {% elif form.report_type.data == 'by_status' %}
+                {% include 'reports/_by_status.html' %}
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

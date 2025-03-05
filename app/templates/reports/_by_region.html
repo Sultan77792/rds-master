@@ -1,0 +1,21 @@
+<h3>Статистика по регионам</h3>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Регион</th>
+                <th>Количество пожаров</th>
+                <th>Общая площадь (га)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for region in data %}
+            <tr>
+                <td>{{ region.region }}</td>
+                <td>{{ region.total_fires }}</td>
+                <td>{{ "%.2f"|format(region.total_area|float) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

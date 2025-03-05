@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2>Журнал событий</h2>
+    
+    <!-- Фильтры -->
+    <div class="row mb-3">
+        <div class="col">
+            <input type="text" id="searchInput" class="form-control" placeholder="Поиск...">
+        </div>
+        <div class="col">
+            <select id="rowsPerPage" class="form-control">
+                <option value="10">10 записей</option>
+                <option value="25">25 записей</option>
+                <option value="50">50 записей</option>
+                <option value="100">100 записей</option>
+            </select>
+        </div>
+    </div>
+    
+    <!-- Таблица -->
+    <table id="auditTable" class="table table-striped">
+        <thead>
+            <tr>
+                <th data-sort="timestamp">Время <i class="fas fa-sort"></i></th>
+                <th data-sort="user">Пользователь <i class="fas fa-sort"></i></th>
+                <th data-sort="action">Действие <i class="fas fa-sort"></i></th>
+                <th data-sort="table">Таблица <i class="fas fa-sort"></i></th>
+                <th data-sort="record">ID записи <i class="fas fa-sort"></i></th>
+                <th>Изменения</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for log in logs %}
+            <tr>
+                <td>{{ log.timestamp.strftime('%d.%m.%Y %H:%M:%S') }}</td>
+                <td>{{ log.user.username }}</td>
+                <td>{{ log.action }}</td>
+                <td>{{ log.table_name }}</td>
+                <td>{{ log.record_id }}</td>
+                <td>{{ log.changes }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <!-- Пагинация -->
+    <nav>
+        <ul class="pagination">
+            {{ pagination.links | safe }}
+        </ul>
+    </nav>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+    // Сортировка
+    $('th[data-sort]').click(function() {
+        const column = $(this).data('sort');
+        const order = $(this).hasClass('asc') ? 'desc' : 'asc';
+        window.location.href = `{{ url_for('audit.log') }}?sort=${column}&order=${order}`;
+    });
+    
+    // Поиск
+    $('#searchInput').on('keyup', function() {
+        const value = $(this).val().toLowerCase();
+        $('#auditTable tbody tr').filter(function() {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+    });
+    
+    // Количество записей на странице
+    $('#rowsPerPage').change(function() {
+        window.location.href = `{{ url_for('audit.log') }}?per_page=${$(this).val()}`;
+    });
+});
+</script>
+{% endblock %}
